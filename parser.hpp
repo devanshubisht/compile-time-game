@@ -64,9 +64,7 @@ constexpr char encode_candy_type(CandyType t) {
   return map_candy_type[static_cast<int>(t)];
 }
 
-constexpr CandyType
-
-decode_candy_type(char c) {
+constexpr CandyType decode_candy_type(char c) {
   switch (c) {
   case ' ':
     return CandyType::None;
@@ -100,9 +98,7 @@ constexpr state_decoration encode_candy_state(CandyState s) {
   return dec;
 }
 
-CONSTEXPR CandyState
-
-decode_candy_state(char up_char) {
+CONSTEXPR CandyState decode_candy_state(char up_char) {
   CandyState state = {false};
 
   if (up_char == '*') {

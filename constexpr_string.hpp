@@ -9,6 +9,8 @@
 
 template <std::size_t N> class constexpr_string {
 public:
+  constexpr constexpr_string() : data_{}, size_{N} {};
+
   constexpr constexpr_string(const char (&a)[N]) : data_{}, size_{N - 1} {
     for (size_t i = 0; i < size_; i++) {
       data_[i] = a[i];
@@ -46,6 +48,18 @@ public:
     return newString;
   }
 
+  // auto cannot be used here because then it will be runtime as the compiler wont know whats the final size
+  // Alternative we can input a template non type argument to dictate whats the size
+  constexpr constexpr_string<N> substr(std::size_t pos, std::size_t len = -1) const
+  {
+    if (pos > size_) {
+      throw std::runtime_error("out of range");
+    }
+
+    const std::size_t new_size = (len == static_cast<std::size_t>(-1)) ? (size_ - pos) : std::min(len, (size_ - pos));
+    return constexpr_string<N>(data_ + pos, new_size);
+  }
+
   constexpr const char &operator[](std::size_t i) const {
     if (i < size_) {
       return data_[i];
@@ -59,7 +73,7 @@ public:
   constexpr char *end() { return data_ + size_; }
 
 private:
-  array<char, N> data_;
+  char data_[N];
   std::size_t size_;
 };
 
